@@ -1,4 +1,8 @@
 #include <iostream>
+#include <ctime>
+#include <unistd.h>
+
+#include "vector2.h"
 
 using namespace std;
 
@@ -35,12 +39,109 @@ void Mem_areas_verify(int arg = 0)
     delete ptr2;
 }
 
+int &ref_add_10(int &arg)
+{
+    arg += 10;
+    int &ref_of_arg = arg;
+    return ref_of_arg;
+}
+
+void Ref_test()
+{
+    int num = 10;
+    int &new_num = ref_add_10(num); // 将num+=10, 并返回引用。
+    new_num += 10;                  // 返回的引用再+=10
+    cout << "num = " << num << endl;
+    cout << "new_num = " << new_num << endl;
+}
+
+void Time_test()
+{
+    // 以秒为单位更新时间显示
+    time_t now;
+    while (true)
+    {
+        time(&now);
+        cout << ctime(&now) << endl;
+        sleep(1);
+    }
+}
+
+void Vector2_test()
+{
+    /**
+     * 不同方式创建不同类型的向量
+     * 操作符重载测试
+     * 简单属性计算测试
+     */
+
+    Vector2<int> v_int_1(10, 20);
+    Vector2<int> v_int_2 = {20, 30};
+    cout << "v_int_1 = " << v_int_1 << endl;
+    cout << "v_int_2 = " << v_int_2 << endl;
+
+    Vector2<float> v_float_1(1.23f, 4.56f);
+    Vector2<float> v_float_2 = v_float_1;
+    cout << "v_float_1 = " << v_float_1 << endl;
+    cout << "v_float_2 = " << v_float_2 << endl;
+
+    Vector2<double> v_double_1(1.23, 4.56);
+    Vector2<double> v_double_2(L_AND_A, 10.0, 60.0);
+    cout << "v_double_1 = " << v_double_1 << endl;
+    cout << "v_double_2 = " << v_double_2 << endl;
+    cout << "v_double_2 : Length = " << v_double_2.length() << ", Angle = " << v_double_2.angle() << endl;
+    Vector2<double> v_double_3 = v_double_2.normalize();
+    cout << "v_double_2.normalize() = " << v_double_3 << endl;
+    cout << "v_double_2.normalize() : Length = " << v_double_3.length() << ", Angle = " << v_double_3.angle() << endl;
+
+    Vector2<int> v_int_t = v_int_1 + v_int_2;
+    cout << "v_int_1 + v_int_2 = " << v_int_t << endl;
+
+    v_int_t = v_int_1 - v_int_2;
+    cout << "v_int_1 - v_int_2 = " << v_int_t << endl;
+
+    if (v_float_1 == v_float_2)
+        cout << "v_float_1 == v_float_2" << endl;
+    else
+        cout << "v_float_1!= v_float_2" << endl;
+
+    if (v_double_1 != v_double_2)
+        cout << "v_double_1 != v_double_2" << endl;
+    else
+        cout << "v_double_1 == v_double_2" << endl;
+
+    Vector2<float> v_float_t;
+    cout << "v_float_1 * 3.0 = " << v_float_1 * 3.0f << endl;
+
+    v_float_t = v_float_1 / 2.0f;
+    cout << "v_float_1 / 2.0f = " << v_float_t << endl;
+
+    v_float_1 += v_float_2;
+    cout << "v_float_1 += v_float_2 = " << v_float_1 << endl;
+
+    v_double_1 -= {1.0, 2.0};
+    cout << "v_double_1 -= {1.0, 2.0} = " << v_double_1 << endl;
+
+    v_double_2 *= 2.0;
+    cout << "v_double_2 *= 2.0 = " << v_double_2 << endl;
+
+    cout << "v_double_1 /= 2.0 = " << (v_double_1 /= 2.0) << endl;
+}
+
 int main()
 {
-    cout << "\n\nLast build on : " << __DATE__ << " " << __TIME__ << endl
-         << endl;
+    cout << "\n\n===================================================\n";
+    cout << "Last build on : " << __DATE__ << " " << __TIME__;
+    cout << "\n------------------=#|START|#=----------------------\n";
 
-    Mem_areas_verify(); // 内存分布验证
+    // Mem_areas_verify(); // 内存分布验证
 
+    // Ref_test(); // 引用传递测试
+
+    // Time_test(); // 时间显示测试
+
+    Vector2_test(); // 向量测试
+
+    cout << "\n-------------------=#|END|#=-----------------------\n";
     return 0;
 }
