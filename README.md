@@ -8,4 +8,4 @@
 
 [笔记](./doc/note.md)
 
-[最新可执行文件](./build/AiC.exe)
+[最新可执行文件](./build)
