@@ -1,14 +1,36 @@
 #include <iostream>
+#include <string>
 
-template <typename T>
-class Vector2 {
+using namespace std;
+
+// 多态
+
+class Animal
+{
 public:
-    T x;
-    T y;
-
-    Vector2(T xVal = 0, T yVal = 0);
-
-    template <typename U>
-    friend std::ostream& operator<<(std::ostream& os, const Vector2<U>& vec);
+    string name;
+    int age;
+    Animal(string n, int a) : name(n), age(a) {}
+    virtual void speak() = 0;
 };
 
+class Dog : public Animal
+{
+public:
+    Dog(string n, int a) : Animal(n, a) {}
+    void speak()
+    {
+        std::cout << "Woof!" << std::endl;
+    }
+};
+
+
+class Cat : public Animal
+{
+public:
+    Cat(string n, int a) : Animal(n, a) {}
+    void speak()
+    {
+        std::cout << "Meow!" << std::endl;
+    }
+};

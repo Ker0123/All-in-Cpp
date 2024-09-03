@@ -1,8 +1,10 @@
 #include <iostream>
 #include <ctime>
 #include <unistd.h>
+#include <string>
 
 #include "vector2.h"
+#include "sample_class.h"
 
 using namespace std;
 
@@ -128,6 +130,14 @@ void Vector2_test()
     cout << "v_double_1 /= 2.0 = " << (v_double_1 /= 2.0) << endl;
 }
 
+void Sample_class_test()
+{
+    Cat c1("Tom", 2);
+    Cat c2("Jerry", 3);
+    cout << "c1 = " << c1.name << endl;
+    cout << "c2 = " << c2.name << endl;
+}
+
 int main()
 {
     cout << "\n\n===================================================\n";
@@ -140,7 +150,9 @@ int main()
 
     // Time_test(); // 时间显示测试
 
-    Vector2_test(); // 向量测试
+    // Vector2_test(); // 二维向量测试
+
+    Sample_class_test(); // 类测试
 
     cout << "\n-------------------=#|END|#=-----------------------\n";
     return 0;
