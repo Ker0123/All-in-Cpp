@@ -206,24 +206,186 @@ public:
 >on: [C++ 接口（抽象类）| 菜鸟教程](https://www.runoob.com/cplusplus/cpp-interfaces.html)
 
 
+## 文件和流
+
+C++标准库`fstream`，它定义了三个新的数据类型：
+
+1. `ifstream`：以程序为主体，输入文件流。用以读取文件。
+2. `ofstream`：以程序为主体，输出文件流。用以写入文件。
+3. `fstream`：兼备前两者功能。
+
+在C++文件处理时，除了要包含`fstream`，还得包含`iostream`。
+
+### 打开文件
+
+使用`fstream`的成员函数`open()`打开函数。
+
+```C++
+void open(const char *filename, ios::openmode mode);
+
+// mode可选的取值。同时使用多种模式，用 | 隔开
+ios::app        // 追加模式，从文件末尾开始读写。另：文件不存在会先创建
+ios::ate        // 文件打开后定位到文件末尾
+ios::in         // 读模式
+ios::out        // 写模式
+ios::trunc      // 如果文件存在，则将其截断(清空)
+ios::binary     // 以二进制模式打开(不考虑换行、文件结尾符等，按原始数据读写)
+ios::nocreate   // 不建立文件，所以文件不存在时打开失败
+ios::noreplace  // 不覆盖文件，所以打开文件时如果文件存在失败
+```
+
+### 读写文件
+
+用`>>`读文件
+
+```C++
+ifstream file = open("file.txt", ios::in);
+char ch;
+file >> ch;
+```
+
+用`<<`写文件。
+
+```C++
+ofstream file = open("file.txt", ios::in);
+char ch;
+file << ch;
+```
+
+>TODO: 关于读写文件还有很多内容待重温，如`seek`、`getline()`
+
+### 关闭文件
+
+使用`fstream`的成员函数`close(fstream )`来关闭文件。它会自动关闭，刷新所有流。
+
+## 资料：fstream内常用方法
+
+1. 打开和关闭文件
+   - `open(filename, mode)`：打开指定文件，可以使用不同的模式（如 ios::in、ios::out、ios::binary 等）。
+   - `close()`：关闭已打开的文件。
+2. 检查文件状态
+   - `is_open()`：检查文件是否成功打开。
+   - `good()`：检查文件流是否处于良好状态。
+   - `fail()`：检查文件流是否发生错误。
+   - `eof()`：检查是否到达文件末尾。
+   - `bad()`：检查文件流是否发生严重错误。
+3. 读取和写入数据
+   - `<<` 运算符：用于向文件写入数据。
+   - `>>` 运算符：用于从文件读取数据。
+   - `getline(stream, str)`：从文件中读取一行数据到字符串 str。
+   - `read(buffer, size)`：从文件中读取指定字节数的数据到缓冲区 buffer。
+   - `write(buffer, size)`：将缓冲区 buffer 中的指定字节数的数据写入文件。
+4. 定位文件指针
+   - `tellg()` 和 `tellp()`：获取当前读取和写入位置。
+   - `seekg(pos)` 和 `seekp(pos)`：设置读取和写入位置。
+   - `seekg(offset, dir)` 和 `seekp(offset, dir)`：根据偏移量和方向设置读取和写入位置。方向可以是 `ios::beg`（从文件开头）、`ios::cur`（从当前位置）或 `ios::end`（从文件末尾）。
+
+## 模版
+
+模版技术的意义：  
+C++作为强调数据类型的语言，大部分数据类型都要显式声明(auto也是在编译时确定数据类型)。  
+但是各种类型之间，其实大同小异。  
+使用模版技术定义类或函数的操作，能让用户以相识但又不相同的方法处理相识又不相同的数据类型。
 
 
+### 导入：模版函数
 
+一个简单的模版函数的定义：
 
+```C++
+// 取较小值
+template <typename T>
+T minimum(const T& lhs, const T& rhs)
+{
+    return lhs < rhs ? lhs : rhs;
+}
+```
 
+调用函数时，编译器会将实例化的类型`T`**替换**掉函数体中的所有`T`。  
+这个过程可视为将模版`mininum<T>`实例化出`minimum<int>`。
 
+一个方便的地方：调用模版函数时，编译器会通过参数数据类型推导T。推导规则基于普通函数推导规则。
+例如：若`a`、`b`都是`int`类型————则`minimum(a, b)`等价于`minimum<int>(a, b)`。
+在其他无法自动推导的情况下，需要显式声明类型。例如模版类实例化————`vector<int> vi`。
 
+### 模版参数
 
+类型参数可以有多个。用逗号分开，或者用`...`代表一个或多个参数。
 
+```C++
+template <typename T, typename U, typename V> class Foo{};
+template <class T, class U, class V> class Foo{};
 
+template<typename... Arguments> class vtclass;
+vtclass< > vtinstance1;
+vtclass<int> vtinstance2;
+vtclass<float, bool> vtinstance3;
+```
 
+另有*非类型参数*，也称*值参数*。能直接传入一个常量、指针等，做简单替换。  
+用这个方法可以在程序运行时生成定长字符串：
 
+```C++
+template<typename T, size_t L>
+class MyArray
+{
+    T arr[L];
+public:
+    MyArray() { ... }
+};
 
+MyArray<MyClass*, 10> arr;
+```
 
+> 这段不太熟 [模版(C++) | Microsoft Learn](https://learn.microsoft.com/zh-cn/cpp/cpp/templates-cpp?view=msvc-170)
 
+### 模版特殊化
 
+为特定类型提供函数模板的显式专用化（重写）来定义该类型的特殊行为。
 
+```C++
+template <typename T>
+class Vector2
+{
+  T x;
+  T y;
+  void print()
+  {
+    cout << "(" << x << ", " << y << ")" << endl;
+  }
+}
+```
 
+注：*之后的示例都以这个类为基础*
 
+**完全特化**：
+为整个模版函数\对象提供一个完全匹配某类型的实现
 
+```C++
+// 增加以下内容：
+template <typename T> // 这个例子中typename T 可不写，因为没有用上。如果是通过T推导出的类型(*T)的特殊化，则需要写。
+class Vector2<float>
+{
+  float x;
+  float y;
+  void print()
+  {
+    cout << "Vector2_float: "<< "(" << x << ", " << y << ")" << endl;
+  }
+}
+```
 
+### 函数特殊化
+
+写到这里发现特殊化没那么难，本质就是函数重载罢了。  
+对模版函数/对象进行重载，保留与`template`相关的格式，修改参数类型。  
+调用时匹配到更优先的参数类型，则会执行特殊代码。
+
+```C++
+// 在函数定义部分增加以下内容
+template <typename T> // typename T 可不写，因为这里的函数体没用到。
+void print<double>()
+{
+    cout << "Vector2_double: "<< "(" << x << ", " << y << ")" << endl;
+}
+```
