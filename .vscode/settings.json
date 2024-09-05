@@ -3,6 +3,7 @@
         "system_error": "cpp",
         "typeinfo": "cpp",
         "iosfwd": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "iostream": "cpp"
     }
 }

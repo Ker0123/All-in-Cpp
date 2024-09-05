@@ -138,11 +138,20 @@ void Sample_class_test()
     cout << "c2 = " << c2.name << endl;
 }
 
+void Sample_class_constructor_test()
+{
+    cout << "func start" << endl;
+    ctest1 obj1;
+    ctest2 obj2;
+    cout << "func end" << endl;
+}
+
 int main()
 {
-    cout << "\n\n===================================================\n";
-    cout << "Last build on : " << __DATE__ << " " << __TIME__;
-    cout << "\n------------------=#|START|#=----------------------\n";
+    putchar('\n');
+    cout << "==================================================="<<endl;
+    cout << "Last build on : " << __DATE__ << " " << __TIME__ << endl;
+    cout << "--•START•------------------------------------------"<<endl;
 
     // Mem_areas_verify(); // 内存分布验证
 
@@ -152,8 +161,11 @@ int main()
 
     // Vector2_test(); // 二维向量测试
 
-    Sample_class_test(); // 类测试
+    // Sample_class_test(); // 类测试
 
-    cout << "\n-------------------=#|END|#=-----------------------\n";
+    // Sample_class_constructor_test(); // 类构造函数测试
+
+    cout << "--•END•--------------------------------------------"<<endl;
+    putchar('\n');
     return 0;
 }

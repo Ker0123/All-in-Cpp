@@ -34,3 +34,31 @@ public:
         std::cout << "Meow!" << std::endl;
     }
 };
+
+class ctest1
+{
+public:
+    ctest1()
+    {
+        cout << "ctest1 constructor" << endl;
+    }
+    ~ctest1()
+    {
+        cout << "ctest1 destructor" << endl;
+    }
+    int value;
+};
+
+class ctest2
+{
+public:
+    ctest2()
+    {
+        cout << "ctest2 constructor" << endl;
+    }
+    ~ctest2()
+    {
+        cout << "ctest2 destructor" << endl;
+    }
+    ctest1 c1_friend;
+};
