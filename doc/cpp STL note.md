@@ -124,7 +124,7 @@ getline(cin, aline);
 
 1. `istringstream`：用于从字符串中读取数据。
 2. `ostringstream`：用于将数据写入字符串。
-3. `stringstream`：是istringstream和ostringstream的组合，可以同时进行读取和写入操作。
+3. `stringstream`：是`istringstream`和`ostringstream`的组合，可以同时进行读取和写入操作。
 
 **用法**：
 
@@ -226,7 +226,132 @@ cout << hex << 12 << "," << 24;
 
 ## 容器
 
+容器类型上的操作形成了一种层次：
+
+1. 某些操作是所有容器类型都提供的
+2. 另外一些操作仅针对顺序容器、关联容器、无序容器
+3. 还有一些操作只针对于小部分容器
+
+所有容器：
+
+| 关键字                            | 含义                                       |
+| --------------------------------- | ------------------------------------------ |
+| **类型别名**                      |                                            |
+| `iterator`                        | 此容器的迭代器类型                         |
+| `size_type`                       | 最大可能容器大小                           |
+| `value_type`                      | 元素类型                                   |
+| **swap、大小**                    |                                            |
+| `swap()`                          | 交换元素                                   |
+| `empty()`                         | 判断是否为空                               |
+| `size()`                          | 返回元素个数                               |
+| **添加、删除元素(不适用于array)** |                                            |
+| `insert()`                        | 在指定位置插入元素                         |
+| `erase()`                         | 删除元素                                   |
+| `clear()`                         | 清空容器                                   |
+| **获取迭代器**                    |                                            |
+| `begin()`                         | 返回指向第一个元素的迭代器                 |
+| `end()`                           | 返回指向最后一个元素之后的位置的迭代器     |
+| **反向容器的额外成员**            |                                            |
+| `reverse_iterator`                | 反向迭代器类型                             |
+| `rbegin()`                        | 返回指向第一个元素的反向迭代器             |
+| `rend()`                          | 返回指向最后一个元素之后的位置的反向迭代器 |
+
+### 容器的选择
+
+通常，使用`vector`容器是最好的选择，除非有很好的理由选择其他容器。
+
+- `vector`在尾部插入数据很快，在其他位置插入数据可能很慢。
+- 如果程序中有很多小的元素，且不想有额外的空间开销，则**不应该**选用`list`、`forward_list`。
+- 如果有随机访问的需求，选择`vector`或`deque`。
+- 如果经常在中间位置插入或删除元素，选择`list`或`forward_list`。
+- 如果大部分情况是在头尾增删改查，选择`deque`。
+
+- 如果插入时可能在中间，使用时只在头尾(数值顺序访问)。可以在输入阶段用`list`，然后`sort`，拷贝到`vector`，再使用。
+
 ### array
+
+是一种固定大小的**数组**容器。
+
+与数组相比，它：
+
+1. 强制类型检查。不能往空间里随便填东西了。
+2. 数组大小在编译时确定。不会有莫名其妙的越界了。
+3. 内存连续(这个两者都有吧？)
+4. 作为标志容器，有与`vector`相似的性质(定义方式、遍历方式、取size()等)。
+
+适用于需要固定大小数组的场合。
+
+### vector
+
+用的挺多了，不加赘述。碰到问题访问：  
+[vector 类 | Microsoft Learn](https://learn.microsoft.com/zh-cn/cpp/standard-library/vector-class?view=msvc-170#functions)
+
+### deque
+
+双端队列。
+
+成员介绍：  
+[deque 类 | Microsoft Learn](https://learn.microsoft.com/zh-cn/cpp/standard-library/deque-class?view=msvc-170#members)
+
+**主要成员摘要**：
+
+类定义：
+
+```C++
+template <class Type, class Allocator =allocator<Type>>
+class deque
+```
+
+TODO:...
+
+
+### list
+
+序列容器。类似于链表，允许在任意位置快速访问；不需要设定大小，不需要重新分配内存。
+
+大部分操作与`vector`相同，但因为其类似于双向链表的性质，它不支持随机访问，可通过**双向迭代器**进行遍历元素。
+
+### forward_list
+
+单向链表，其他与`list`并无不同。
+
+### stack
+
+栈。用法相似，不赘述。
+
+### queue
+
+队列数据结构。
+
+不允许随机访问！
+
+### priority_queue
+
+优先队列。
+
+默认是*最大堆*，即pop出的数据永远是最大的一个。可以手动重载比较函数更改优先方式。
+
+```C++
+priority_queue<int> pq;
+
+// 声明一个自定义类型的优先队列，需要提供比较函数
+struct compare {
+    bool operator()(int a, int b) {
+        return a > b; // 这里定义了最小堆
+    }
+};
+priority_queue<int, vector<int>, compare> pq_min;
+```
+
+同样，作为一种队列，它不能被随机访问，也不能通过迭代器访问。链表还是顺序结构取决于实现方式。
+
+### set
+
+
+
+
+
+
 
 
 
