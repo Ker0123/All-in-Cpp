@@ -5,6 +5,8 @@
 
 #include "vector2.h"
 #include "sample_class.h"
+#include "stmanager.h"
+#include "twowaytowait.h"
 
 using namespace std;
 
@@ -146,6 +148,76 @@ void Sample_class_constructor_test()
     cout << "func end" << endl;
 }
 
+// 新环境测试: 将编译工具换成了版本更新的w64devkit, 部分能用环境变量g++的用环境变量
+void new_enviroment_test()
+{
+    cout << "new_enviroment_test start" << endl;
+    int a = 10;
+    int b = 20;
+    int c = a + b;
+    cout << "c = " << c << endl;
+    cout << "new_enviroment_test end" << endl;
+}
+
+// 单例模式测试
+void instance_test()
+{
+    StManager *s1 = StManager::GetInstance();
+    StManager *s2 = StManager::GetInstance();
+    s1->changeDir(Vector2<float>(3.0f, 4.0f));
+    s2->changeDir(Vector2<float>(4.0f, 3.0f));
+
+    unsigned int count = 0;
+    float angle = 0;
+    while(true)
+    {
+        if(count++ >= 4294967295)
+        {
+            s1->printStatus();
+            s2->printStatus();
+            angle += 15.0f;
+            s1->changeDir(Vector2<float>(1,1.0f, angle));
+            count = 0;
+            cout << "-" << endl;
+        }
+    }
+}
+
+void TwoWayToWait_test()
+{
+    // 将被包装的对象
+    wait_godo_lucky lucky_wait;
+    wait_godo_quickly quick_wait;
+
+    // 包装后的对象
+    target *after_adapte;
+
+    // 用合适的包装器进行包装, 然后执行
+    after_adapte = new adapter_quickly(&quick_wait);
+    int spend_teime = 0;
+    while(!after_adapte->execute(5))
+    {
+        Sleep(1000);
+        system("cls");
+        spend_teime++;
+    }
+    cout << "spend_teime = " << spend_teime << endl;
+    delete after_adapte;
+
+    system("pause");
+
+    after_adapte = new adapter_lucky(&lucky_wait);
+    spend_teime = 0;
+    while(!after_adapte->execute(5))
+    {
+        Sleep(1000);
+        system("cls");
+        spend_teime++;
+    }
+    cout << "spend_teime = " << spend_teime << endl;
+    delete after_adapte;
+}
+
 int main()
 {
     putchar('\n');
@@ -164,6 +236,10 @@ int main()
     // Sample_class_test(); // 类测试
 
     // Sample_class_constructor_test(); // 类构造函数测试
+
+    // new_enviroment_test(); // 新环境测试
+
+    TwoWayToWait_test();
 
     cout << "--•END•--------------------------------------------"<<endl;
     putchar('\n');

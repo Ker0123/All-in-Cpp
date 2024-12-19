@@ -2,17 +2,17 @@
     "tasks": [
         {
             "type": "cppbuild",
-            "label": "MingW g++ build",
-            "command": "C:/Program Files/MingW64/bin/g++.exe",
+            "label": "g++ build",
+            "command": "g++",
             "args": [
-                "-fdiagnostics-color=always",
                 "-g",
-                "${workspaceFolder}/src/*.cpp",
+                "${workspaceFolder}\\src\\*.cpp",
                 "-o",
-                "${workspaceFolder}/build/AiC.exe"
+                "${workspaceFolder}\\build\\AiC.exe",
+                "-std=c++11"
             ],
             "options": {
-                "cwd": "C:/Program Files/MingW64/bin"
+                "cwd": ""
             },
             "problemMatcher": [
                 "$gcc"
@@ -20,7 +20,7 @@
             "group": {
                 "kind": "build"
             },
-            "detail": "MingW cpp build task"
+            "detail": "defualt g++ build"
         }
     ],
     "version": "2.0.0"
